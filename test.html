@@ -1,0 +1,86 @@
+<html>
+<head>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+
+        
+
+        <hr />
+
+        <div class="row">
+            <div class="col-sm-8">
+
+                <h4 class="page-header">Nodejs Test</h4>
+                <form role="form">
+                    <div class="form-group float-label-control">
+                        <label for="">Host</label>
+                        <input type="text" id="host" class="form-control" placeholder="http://localhost:3000">
+                    </div>
+                    <div class="form-group float-label-control">
+                        <label for="">Emit</label>
+                        <input type="text" id="emit" class="form-control" placeholder="Emit command">
+                    </div>
+                    <div class="form-group float-label-control">
+                        <label for="">Body</label>
+                        <textarea id="body" class="form-control" placeholder="Body to be emit" rows="5"></textarea>
+                    </div>
+                </form>
+				<input onclick="emitmsg()" type="button" class="btn btn-primary" value="Emit message" />
+
+            </div>
+            <div class="col-sm-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul>
+                            <li>Very customizable</li>
+                            <li>Works with Bootstrap's native form examples</li>
+                            <li>Uses CSS transitions for fallback browser support</li>
+                            <li>Placeholder override for labels when fields are empty</li>
+                            <li>Included authored jQuery plugin</li>
+                            <li>Optional bottom label positioning with the <code>.label-bottom</code> utility</li>
+                            <li>Works great with Chrome's AutoComplete</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.2/socket.io.js"></script>
+<script>
+function emitmsg() {
+	host = $("#host").val();
+	if (host == "") {
+		host = "http://localhost:3000";
+	}
+	console.log(host);
+  var socket = io.connect(host);
+  socket.on('connect',function() {
+    console.log("did connect");
+	data = {}
+	try {
+		data = $.parseJSON($("#body").val());
+		console.log(data);
+	} catch(ex) {
+		console.log(ex);
+	}
+    socket.emit($("#emit").val(),data);
+	socket.onevent = function(package_data) {
+		console.log(package_data);
+	}
+  })
+  
+}
+</script>
